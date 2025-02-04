@@ -1,8 +1,29 @@
-import { type NextRequest } from "next/server";
-import { updateSession } from "@/utils/supabase/middleware";
+import { NextResponse, NextRequest } from "next/server";
+import jwt from "jsonwebtoken";
 
 export async function middleware(request: NextRequest) {
-  return await updateSession(request);
+  const token = request.cookies.get("token")?.value;
+  console.log("token", token);
+  const protectedRoutes = ["/dashboard"];
+
+  if (protectedRoutes.some((path) => request.nextUrl.pathname.startsWith(path))) {
+    if (!token) {
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
+
+    const response = await fetch(`http://localhost:3000/api/verify`, {
+      method: "GET",
+      headers: {
+        "Cookie": `token=${token}`
+      }
+    });
+
+    if (response.status !== 200) {
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {
