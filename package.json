@@ -30,10 +30,12 @@
     "uuid": "^11.0.5"
   },
   "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
     "@types/jsonwebtoken": "^9.0.8",
     "@types/node": "22.10.2",
     "@types/react": "^19.0.2",
     "@types/react-dom": "19.0.2",
+    "hardhat": "^2.22.18",
     "postcss": "8.4.49",
     "tailwind-merge": "^2.6.0",
     "tailwindcss": "3.4.17",
