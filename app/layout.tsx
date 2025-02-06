@@ -1,3 +1,4 @@
+import { Providers } from "./providers";
 import { Geist } from "next/font/google";
 import "./globals.css";
 
@@ -18,13 +19,13 @@ const geistSans = Geist({
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en" className={geistSans.className} suppressHydrationWarning>
       <body>
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

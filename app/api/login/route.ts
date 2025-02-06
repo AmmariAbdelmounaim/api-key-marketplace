@@ -18,6 +18,7 @@ export async function POST(request: Request) {
     const payload = {
       id: user.id,
       walletAddress: user.walletAddress,
+      role: user.role,
       // add more fields (e.g., role) as needed
     };
 

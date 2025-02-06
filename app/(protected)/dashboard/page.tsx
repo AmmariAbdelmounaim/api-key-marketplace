@@ -2,11 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useLogoutMutation } from "@/hooks/queries/auth/useLogoutMutation";
+import { useToast } from "@/hooks/use-toast";
 
 export default function ProtectedPage() {
   // Local state for storing user session info
   const [userInfo, setUserInfo] = useState<any>(null);
   const router = useRouter();
+  const { toast } = useToast();
+  const { mutateAsync: logout } = useLogoutMutation();
 
   useEffect(() => {
     // Fetch the session info on component mount
@@ -29,20 +33,18 @@ export default function ProtectedPage() {
   // Handle logout by calling the logout API route
   const handleLogout = async () => {
     try {
-      const res = await fetch("/api/logout", {
-        method: "POST",
+      await logout();
+      toast({
+        title: "Logged out successfully",
+        description: "You have been disconnected from your wallet",
       });
-      if (!res.ok) {
-        throw new Error("Logout failed");
-      }
-      const data = await res.json();
-      if (data.success) {
-        console.log("Logged out successfully");
-        // Redirect the user after logout; change '/login' to your desired route
-        router.push("/login");
-      }
-    } catch (error) {
-      console.error("Error logging out:", error);
+      router.push("/");
+    } catch (error: any) {
+      toast({
+        title: "Error logging out",
+        description: error.message || "An error occurred while logging out",
+        variant: "destructive",
+      });
     }
   };
 

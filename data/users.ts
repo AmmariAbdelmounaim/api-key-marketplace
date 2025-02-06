@@ -12,7 +12,7 @@ export const getUserByWalletAddress = async (walletAddress: string) => {
     const { data, error } = await supabase
       .from("users")
       .select("*")
-      .eq("walletAddress", walletAddress)
+      .eq("wallet_address", walletAddress)
       .limit(1);
 
     if (error) {
@@ -44,7 +44,7 @@ export const createUser = async (walletAddress: string, nonce: string) => {
     const supabase = await createClient();
     const { data, error } = await supabase
       .from("users")
-      .insert({ walletAddress, nonce })
+      .insert({ wallet_address: walletAddress, nonce })
       .select()
       .single();
 
@@ -71,7 +71,7 @@ export const updateUserNonce = async (walletAddress: string, nonce: string) => {
     const { data, error } = await supabase
       .from("users")
       .update({ nonce })
-      .eq("walletAddress", walletAddress)
+      .eq("wallet_address", walletAddress)
       .select()
       .single();
     if (error) {
@@ -96,7 +96,7 @@ export const getUserByWalletAddressAndNonce = async (
     const { data, error } = await supabase
       .from("users")
       .select("*")
-      .eq("walletAddress", walletAddress)
+      .eq("wallet_address", walletAddress)
       .eq("nonce", nonce)
       .single(); // Using single() for consistency when expecting one record.
 
