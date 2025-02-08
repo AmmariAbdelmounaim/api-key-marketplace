@@ -16,33 +16,18 @@ import { useLogoutMutation } from "@/hooks/queries/auth/useLogoutMutation";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Tables } from "@/database.types";
+import { useLogout } from "@/hooks/useLogout";
 interface StoreClientProps {
   apiKeys: Tables<"api_keys">[];
 }
 
 export default function StoreClient({ apiKeys }: StoreClientProps) {
-  const { toast } = useToast();
   const { isLoading } = useSessionQuery();
-  const { mutateAsync: logout } = useLogoutMutation();
+  const { handleLogout } = useLogout();
   const router = useRouter();
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-
-      toast({
-        title: "Logout successful",
-        description: "You have been logged out",
-      });
-
-      router.push("/");
-    } catch (error: any) {
-      toast({
-        title: "Logout Error",
-        description: error.message || "An error occurred during logout",
-        variant: "destructive",
-      });
-    }
+  const handleLogoutClick = async () => {
+    await handleLogout();
   };
 
   return (
@@ -62,7 +47,7 @@ export default function StoreClient({ apiKeys }: StoreClientProps) {
 
             <Button
               disabled={isLoading}
-              onClick={handleLogout}
+              onClick={handleLogoutClick}
               variant="outline"
             >
               <LogOut className="mr-2 h-4 w-4" /> Logout

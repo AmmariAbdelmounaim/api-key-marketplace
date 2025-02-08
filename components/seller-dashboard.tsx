@@ -16,41 +16,23 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tables } from "@/database.types";
-import { useLogoutMutation } from "@/hooks/queries/auth/useLogoutMutation";
 import { useSessionQuery } from "@/hooks/queries/auth/useSessionQuery";
-import { useToast } from "@/hooks/use-toast";
+import { useLogout } from "@/hooks/useLogout";
 import { LogOut, Upload } from "lucide-react";
-import { useRouter } from "next/navigation";
 
 export default function SellerDashboard({ escrowTransactions }: { escrowTransactions: Tables<"escrow_transactions">[] }) {
-  const { toast } = useToast();
   const { isLoading } = useSessionQuery();
-  const { mutateAsync: logout } = useLogoutMutation();
-  const router = useRouter();
+  const { handleLogout } = useLogout();
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-
-      toast({
-        title: "Logout successful",
-        description: "You have been logged out",
-      });
-
-      router.push("/");
-    } catch (error: any) {
-      toast({
-        title: "Logout Error",
-        description: error.message || "An error occurred during logout",
-        variant: "destructive",
-      });
-    }
+  const handleLogoutClick = async () => {
+    await handleLogout();
   };
+
   return (
     <div className="container mx-auto p-6">
       <div className="flex justify-between">
         <h1 className="text-3xl font-bold mb-6">Seller Dashboard</h1>
-        <Button variant="outline" disabled={isLoading} onClick={handleLogout}>
+        <Button variant="outline" disabled={isLoading} onClick={handleLogoutClick}>
           <LogOut className="mr-2 h-4 w-4" /> Logout
         </Button>
       </div>
