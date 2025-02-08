@@ -70,3 +70,30 @@ export const getEscrowTransactionsByBuyerWallet = async (buyerWallet: string) =>
     throw err;
   }
 };
+
+export const getEscrowTransactionsBySellerWallet = async (sellerWallet: string) => {
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("escrow_transactions")
+      .select("*")
+      .eq("seller_wallet", sellerWallet);
+
+    if (error) {
+      const errorMessage = `Failed to get escrow transactions by seller wallet: ${
+        error?.message || "Unknown error"
+      }`;
+      console.error(
+        "Supabase error in getEscrowTransactionsBySellerWallet:",
+        errorMessage,
+        error
+      );
+      throw new Error(errorMessage, { cause: error });
+    }
+
+    return data;
+  } catch (err) {
+    console.error("Unexpected error in getEscrowTransactionsBySellerWallet:", err);
+    throw err;
+  }
+};

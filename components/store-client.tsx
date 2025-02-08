@@ -22,7 +22,7 @@ interface StoreClientProps {
 
 export default function StoreClient({ apiKeys }: StoreClientProps) {
   const { toast } = useToast();
-  const { data, isLoading } = useSessionQuery();
+  const { isLoading } = useSessionQuery();
   const { mutateAsync: logout } = useLogoutMutation();
   const router = useRouter();
 
@@ -51,7 +51,7 @@ export default function StoreClient({ apiKeys }: StoreClientProps) {
         <div>
           <h1 className="text-3xl font-bold">API Key Marketplace</h1>
         </div>
-        {data?.session && (
+        {!isLoading && (
           <div className="flex items-center gap-2">
             <Button asChild>
               <Link href="/buyer-dashboard">
@@ -61,7 +61,7 @@ export default function StoreClient({ apiKeys }: StoreClientProps) {
             </Button>
 
             <Button
-              disabled={data?.session && isLoading}
+              disabled={isLoading}
               onClick={handleLogout}
               variant="outline"
             >

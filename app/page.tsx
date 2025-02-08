@@ -53,7 +53,7 @@ export default function AuthPage() {
         if(loginData?.user?.role === "BUYER") {
             router.push("/store");
         } else {
-            router.push("/dashboard");
+            router.push("/seller-dashboard");
         }
       }
       
