@@ -10,18 +10,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Key, LogOut } from "lucide-react";
+import { Key, LogOut, ShoppingCart } from "lucide-react";
 import { useSessionQuery } from "@/hooks/queries/auth/useSessionQuery";
 import { useLogoutMutation } from "@/hooks/queries/auth/useLogoutMutation";
 import { useRouter } from "next/navigation";
-
+import Link from "next/link";
+import { Tables } from "@/database.types";
 interface StoreClientProps {
-  apiKeys: Array<{
-    id: number;
-    title: string;
-    description: string;
-    price: string;
-  }>;
+  apiKeys: Tables<"api_keys">[];
 }
 
 export default function StoreClient({ apiKeys }: StoreClientProps) {
@@ -56,13 +52,22 @@ export default function StoreClient({ apiKeys }: StoreClientProps) {
           <h1 className="text-3xl font-bold">API Key Marketplace</h1>
         </div>
         {data?.session && (
-          <Button
-            disabled={data?.session && isLoading}
-            onClick={handleLogout}
-            variant="outline"
-          >
-            <LogOut className="mr-2 h-4 w-4" /> Logout
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button asChild>
+              <Link href="/buyer-dashboard">
+                <ShoppingCart className="mr-2 h-4 w-4" />
+                Dashboard
+              </Link>
+            </Button>
+
+            <Button
+              disabled={data?.session && isLoading}
+              onClick={handleLogout}
+              variant="outline"
+            >
+              <LogOut className="mr-2 h-4 w-4" /> Logout
+            </Button>
+          </div>
         )}
       </header>
 
@@ -77,7 +82,10 @@ export default function StoreClient({ apiKeys }: StoreClientProps) {
               <p>Price: {apiKey.price} ETH</p>
             </CardContent>
             <CardFooter>
-              <Button onClick={() => router.push(`/escrow/${apiKey.id}`)} className="w-full">
+              <Button
+                onClick={() => router.push(`/escrow/${apiKey.id}`)}
+                className="w-full"
+              >
                 <Key className="mr-2 h-4 w-4" /> Buy API Key
               </Button>
             </CardFooter>

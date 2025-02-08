@@ -23,7 +23,7 @@ export async function getApiKeys() {
   }
 }
 
-export async function getApiKeyById(id: string) {
+export async function getApiKeyById(id: number) {
   try {
     const supabase = await createClient();
     const { data, error } = await supabase

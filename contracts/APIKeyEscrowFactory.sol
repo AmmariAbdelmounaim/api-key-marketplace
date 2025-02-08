@@ -9,7 +9,8 @@ contract APIKeyEscrowFactory {
     event EscrowCreated(address escrowAddress, address indexed buyer, address seller, uint amount);
 
     function createEscrow(address seller) external payable {
-        APIKeyEscrow escrow = new APIKeyEscrow{value: msg.value}(seller);
+        require(msg.sender != seller, "Buyer and seller cannot be the same address");
+        APIKeyEscrow escrow = new APIKeyEscrow{value: msg.value}(seller, msg.sender);
         escrows.push(escrow);
         emit EscrowCreated(address(escrow), msg.sender, seller, msg.value);
     }

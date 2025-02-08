@@ -7,8 +7,8 @@ contract APIKeyEscrow {
     uint public amount;
     bool public isDelivered;
     
-    constructor(address _seller) payable {
-        buyer = msg.sender;
+    constructor(address _seller, address _buyer) payable {
+        buyer = _buyer;
         seller = _seller;
         amount = msg.value; // Buyer deposits funds
     }

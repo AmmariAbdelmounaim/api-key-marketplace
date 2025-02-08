@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     // Create a JWT payload with any user information you want to expose.
     const payload = {
       id: user.id,
-      walletAddress: user.walletAddress,
+      walletAddress: user.wallet_address,
       role: user.role,
       // add more fields (e.g., role) as needed
     };
