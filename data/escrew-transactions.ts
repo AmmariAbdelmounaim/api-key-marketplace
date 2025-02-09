@@ -97,3 +97,30 @@ export const getEscrowTransactionsBySellerWallet = async (sellerWallet: string) 
     throw err;
   }
 };
+
+export const updateEscrowTransactionStatus = async (transactionId: number, status: string) => {
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("escrow_transactions")
+      .update({ status: status })
+      .eq("id", transactionId);
+
+    if (error) {
+      const errorMessage = `Failed to update escrow transaction status: ${
+        error?.message || "Unknown error"
+      }`;
+      console.error(
+        "Supabase error in updateEscrowTransactionStatus:",
+        errorMessage,
+        error
+      );
+      throw new Error(errorMessage, { cause: error });
+    }
+
+    return data;
+  } catch (err) {
+    console.error("Unexpected error in updateEscrowTransactionStatus:", err);
+    throw err;
+  }
+};

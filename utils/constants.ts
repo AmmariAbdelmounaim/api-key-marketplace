@@ -38,3 +38,16 @@ export const factoryAbi = [
     type: "event",
   },
 ];
+
+// ABI for the APIKeyEscrow contract
+export const escrowAbi = [
+  "function buyer() public view returns (address)",
+  "function seller() public view returns (address)",
+  "function amount() public view returns (uint256)",
+  "function isDelivered() public view returns (bool)",
+  "function confirmDelivery() public",
+  "function releasePayment() public",
+  "function refundBuyer() public"
+];
+
+export const factoryAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";

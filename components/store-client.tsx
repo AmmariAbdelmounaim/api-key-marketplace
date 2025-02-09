@@ -9,10 +9,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useToast } from "@/hooks/use-toast";
 import { Key, LogOut, ShoppingCart } from "lucide-react";
 import { useSessionQuery } from "@/hooks/queries/auth/useSessionQuery";
-import { useLogoutMutation } from "@/hooks/queries/auth/useLogoutMutation";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Tables } from "@/database.types";

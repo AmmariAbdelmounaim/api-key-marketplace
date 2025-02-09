@@ -2,7 +2,7 @@
 import { ethers } from 'ethers';
 import { useToast } from '@/hooks/use-toast'; // Assuming this is your toast import
 import { useRouter } from 'next/navigation';
-import { factoryAbi } from '@/utils/constants';
+import { factoryAbi, factoryAddress } from '@/utils/constants';
 import { createEscrowTransactionAction } from '@/actionts';
 
 export function useEscrowDeposit() {
@@ -27,7 +27,6 @@ export function useEscrowDeposit() {
       const provider = new ethers.BrowserProvider((window as any).ethereum);
       const signer = await provider.getSigner();
 
-      const factoryAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 
       // Create contract instance
       const factoryContract = new ethers.Contract(
@@ -55,10 +54,14 @@ export function useEscrowDeposit() {
       // Wait for transaction to be mined
       const receipt = await tx.wait();
 
-      // Get the EscrowCreated event
-      const event = receipt.logs.find(
-        (log: any) => log.eventName === "EscrowCreated"
-      );
+      // More specific event finding
+      const event = receipt.logs.find((log: any) => {
+        try {
+          return log.eventName === "EscrowCreated";
+        } catch {
+          return false;
+        }
+      });
 
       if (event) {
         try {

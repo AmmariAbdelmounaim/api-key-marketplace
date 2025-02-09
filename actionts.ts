@@ -1,6 +1,7 @@
 "use server";
 
-import { createEscrowTransaction } from "./data/escrew-transactions";
+import { revalidatePath } from "next/cache";
+import { createEscrowTransaction, updateEscrowTransactionStatus } from "./data/escrew-transactions";
 
 export async function createEscrowTransactionAction(
   buyerWallet: string,
@@ -10,7 +11,7 @@ export async function createEscrowTransactionAction(
   status: string,
   escrowAddress: string
 ) {
-  return createEscrowTransaction(
+  const transaction = await createEscrowTransaction(
     buyerWallet,
     sellerWallet,
     apiKeyId,
@@ -18,4 +19,15 @@ export async function createEscrowTransactionAction(
     status,
     escrowAddress
   );
+  return transaction;
+}
+
+export async function updateEscrowTransactionStatusAction(
+  transactionId: number,
+  status: string
+) {
+  const transaction = await updateEscrowTransactionStatus(transactionId, status);
+  revalidatePath('/seller-dashboard', 'page')
+  revalidatePath('/buyer-dashboard', 'page')
+  return transaction;
 }

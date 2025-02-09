@@ -1,4 +1,5 @@
 "use client";
+import { updateEscrowTransactionStatusAction } from "@/actionts";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -18,7 +19,8 @@ import {
 import { Tables } from "@/database.types";
 import { useSessionQuery } from "@/hooks/queries/auth/useSessionQuery";
 import { useLogout } from "@/hooks/useLogout";
-import { LogOut, Upload } from "lucide-react";
+import { LogOut, Upload, Clock, CheckCircle, ArrowLeftCircle } from "lucide-react";
+import { revalidatePath } from "next/cache";
 
 export default function SellerDashboard({ escrowTransactions }: { escrowTransactions: Tables<"escrow_transactions">[] }) {
   const { isLoading } = useSessionQuery();
@@ -26,6 +28,10 @@ export default function SellerDashboard({ escrowTransactions }: { escrowTransact
 
   const handleLogoutClick = async () => {
     await handleLogout();
+  };
+
+  const handleUploadKey = async (transactionId: number) => {
+    await updateEscrowTransactionStatusAction(transactionId, "DELIVERED");
   };
 
   return (
@@ -62,9 +68,25 @@ export default function SellerDashboard({ escrowTransactions }: { escrowTransact
                   <TableCell>{transaction.buyer_wallet}</TableCell>
                   <TableCell>{transaction.amount} ETH</TableCell>
                   <TableCell>
-                    <Button size="sm">
-                      <Upload className="mr-2 h-4 w-4" /> Upload Key
-                    </Button>
+                    {
+                      transaction.status === "PENDING" ? (
+                        <Button size="sm" variant="default" onClick={() => handleUploadKey(transaction.id)}>
+                          <Upload className="mr-2 h-4 w-4" /> Deliver Key
+                        </Button>
+                      ) : transaction.status === "DELIVERED" ? (
+                        <Button size="sm" variant="secondary" disabled>
+                          <Clock className="mr-2 h-4 w-4" /> Awaiting Confirmation
+                        </Button>
+                      ) : transaction.status === "COMPLETED" ? (
+                        <Button size="sm" className="bg-green-500" disabled>
+                          <CheckCircle className="mr-2 h-4 w-4" /> Transaction Complete
+                        </Button>
+                      ) : transaction.status === "REFUNDED" && (
+                        <Button size="sm" variant="destructive" disabled>
+                          <ArrowLeftCircle className="mr-2 h-4 w-4" /> Funds Refunded
+                        </Button>
+                      )
+                    }
                   </TableCell>
                 </TableRow>
               ))}
