@@ -1,16 +1,16 @@
 import EscrowDeposit from "@/components/escrow-deposit";
-import { getApiKeyById } from "@/data/api-keys";
+import { getFobShipmentById } from "@/data/fob-shipments";
 
 export default async function EscrowPage({
   params,
 }: {
   params: { id: string };
 }) {
-  const apiKey = await getApiKeyById(parseInt(params.id));
+  const fobShipment = await getFobShipmentById(parseInt(params.id));
   
-  if (!apiKey) {
-    return <div>API Key not found</div>;
+  if (!fobShipment) {
+    return <div>Fob Shipment not found</div>;
   }
 
-  return <EscrowDeposit apiKey={apiKey} />;
+  return <EscrowDeposit shipment={fobShipment} />;
 }

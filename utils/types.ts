@@ -3,3 +3,5 @@ export type Session = {
   walletAddress: string;
   role: string;
 };
+
+export type EscrowStatus = "Created" | "ExportCleared" | "LoadedOnBoard" | "Completed" | "Refunded"

@@ -50,38 +50,47 @@ export type Database = {
       escrow_transactions: {
         Row: {
           amount: number | null
-          api_key_id: number | null
+          bill_of_landing_hash: string | null
           buyer_wallet: string | null
+          carrier_wallet: string | null
           created_at: string
           escrow_address: string | null
+          export_declaration_hash: string | null
+          fob_shipment_id: number | null
           id: number
           seller_wallet: string | null
-          status: string | null
+          status: Database["public"]["Enums"]["escrow_status"] | null
         }
         Insert: {
           amount?: number | null
-          api_key_id?: number | null
+          bill_of_landing_hash?: string | null
           buyer_wallet?: string | null
+          carrier_wallet?: string | null
           created_at?: string
           escrow_address?: string | null
+          export_declaration_hash?: string | null
+          fob_shipment_id?: number | null
           id?: number
           seller_wallet?: string | null
-          status?: string | null
+          status?: Database["public"]["Enums"]["escrow_status"] | null
         }
         Update: {
           amount?: number | null
-          api_key_id?: number | null
+          bill_of_landing_hash?: string | null
           buyer_wallet?: string | null
+          carrier_wallet?: string | null
           created_at?: string
           escrow_address?: string | null
+          export_declaration_hash?: string | null
+          fob_shipment_id?: number | null
           id?: number
           seller_wallet?: string | null
-          status?: string | null
+          status?: Database["public"]["Enums"]["escrow_status"] | null
         }
         Relationships: [
           {
             foreignKeyName: "escrew_transactions_api_key_id_fkey"
-            columns: ["api_key_id"]
+            columns: ["fob_shipment_id"]
             isOneToOne: false
             referencedRelation: "api_keys"
             referencedColumns: ["id"]
@@ -99,6 +108,74 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["wallet_address"]
+          },
+          {
+            foreignKeyName: "escrow_transactions_carrier_wallet_fkey"
+            columns: ["carrier_wallet"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["wallet_address"]
+          },
+          {
+            foreignKeyName: "escrow_transactions_fob_shipment_id_fkey"
+            columns: ["fob_shipment_id"]
+            isOneToOne: false
+            referencedRelation: "fob_shipments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fob_shipments: {
+        Row: {
+          bill_of_lading_ref: string | null
+          cargo_description: string | null
+          carrier_id: string
+          created_at: string | null
+          export_declaration_ref: string | null
+          fob_price: number | null
+          id: number
+          port_of_loading: string | null
+          seller_id: string
+          title: string | null
+        }
+        Insert: {
+          bill_of_lading_ref?: string | null
+          cargo_description?: string | null
+          carrier_id: string
+          created_at?: string | null
+          export_declaration_ref?: string | null
+          fob_price?: number | null
+          id?: number
+          port_of_loading?: string | null
+          seller_id: string
+          title?: string | null
+        }
+        Update: {
+          bill_of_lading_ref?: string | null
+          cargo_description?: string | null
+          carrier_id?: string
+          created_at?: string | null
+          export_declaration_ref?: string | null
+          fob_price?: number | null
+          id?: number
+          port_of_loading?: string | null
+          seller_id?: string
+          title?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fob_shipments_carrier_id_fkey"
+            columns: ["carrier_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fob_shipments_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -189,7 +266,12 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      escrow_status:
+        | "Created"
+        | "ExportCleared"
+        | "LoadedOnBoard"
+        | "Completed"
+        | "Refunded"
     }
     CompositeTypes: {
       [_ in never]: never

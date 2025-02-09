@@ -52,8 +52,10 @@ export default function AuthPage() {
         });
         if(loginData?.user?.role === "BUYER") {
             router.push("/store");
-        } else {
+        } else if(loginData?.user?.role === "SELLER") {
             router.push("/seller-dashboard");
+        } else if(loginData?.user?.role === "CARRIER") {
+            router.push("/carrier-dashboard");
         }
       }
       

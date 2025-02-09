@@ -1,13 +1,15 @@
 "server only";
 
 import { createClient } from "@/utils/supabase/server";
+import { EscrowStatus } from "@/utils/types";
 
 export const createEscrowTransaction = async (
   buyerWallet: string,
   sellerWallet: string,
-  apiKeyId: number,
+  carrierWallet: string,
+  shipmentId: number,
   amount: number,
-  status: string,
+  status: EscrowStatus,
   escrowAddress: string
 ) => {
   try {
@@ -15,11 +17,12 @@ export const createEscrowTransaction = async (
     const { data, error } = await supabase
       .from("escrow_transactions")
       .insert({
-        buyer_wallet: buyerWallet, // Current user's address
+        buyer_wallet: buyerWallet,
         seller_wallet: sellerWallet,
-        api_key_id: apiKeyId, // From your route
-        amount: amount,
-        status: status,
+        carrier_wallet: carrierWallet,
+        fob_shipment_id: shipmentId,
+        amount,
+        status,
         escrow_address: escrowAddress,
       })
       .select()
@@ -44,12 +47,16 @@ export const createEscrowTransaction = async (
   }
 };
 
-export const getEscrowTransactionsByBuyerWallet = async (buyerWallet: string) => {
+export const getEscrowTransactionsByBuyerWallet = async (
+  buyerWallet: string
+) => {
   try {
     const supabase = await createClient();
     const { data, error } = await supabase
       .from("escrow_transactions")
-      .select("*")
+      .select(
+        `*,fob_shipments(*)`
+      )
       .eq("buyer_wallet", buyerWallet);
 
     if (error) {
@@ -66,17 +73,22 @@ export const getEscrowTransactionsByBuyerWallet = async (buyerWallet: string) =>
 
     return data;
   } catch (err) {
-    console.error("Unexpected error in getEscrowTransactionsByBuyerWallet:", err);
+    console.error(
+      "Unexpected error in getEscrowTransactionsByBuyerWallet:",
+      err
+    );
     throw err;
   }
 };
 
-export const getEscrowTransactionsBySellerWallet = async (sellerWallet: string) => {
+export const getEscrowTransactionsBySellerWallet = async (
+  sellerWallet: string
+) => {
   try {
     const supabase = await createClient();
     const { data, error } = await supabase
       .from("escrow_transactions")
-      .select("*")
+      .select("*, fob_shipments(*)")
       .eq("seller_wallet", sellerWallet);
 
     if (error) {
@@ -93,17 +105,23 @@ export const getEscrowTransactionsBySellerWallet = async (sellerWallet: string) 
 
     return data;
   } catch (err) {
-    console.error("Unexpected error in getEscrowTransactionsBySellerWallet:", err);
+    console.error(
+      "Unexpected error in getEscrowTransactionsBySellerWallet:",
+      err
+    );
     throw err;
   }
 };
 
-export const updateEscrowTransactionStatus = async (transactionId: number, status: string) => {
+export const updateEscrowTransactionStatus = async (
+  transactionId: number,
+  status: EscrowStatus
+) => {
   try {
     const supabase = await createClient();
     const { data, error } = await supabase
       .from("escrow_transactions")
-      .update({ status: status })
+      .update({ status })
       .eq("id", transactionId);
 
     if (error) {
@@ -121,6 +139,38 @@ export const updateEscrowTransactionStatus = async (transactionId: number, statu
     return data;
   } catch (err) {
     console.error("Unexpected error in updateEscrowTransactionStatus:", err);
+    throw err;
+  }
+};
+
+export const getEscrowTransactionsByCarrierWallet = async (
+  carrierWallet: string
+) => {
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("escrow_transactions")
+      .select("*, fob_shipments(*)")
+      .eq("carrier_wallet", carrierWallet);
+
+    if (error) {
+      const errorMessage = `Failed to get escrow transactions by carrier wallet: ${
+        error?.message || "Unknown error"
+      }`;
+      console.error(
+        "Supabase error in getEscrowTransactionsByCarrierWallet:",
+        errorMessage,
+        error
+      );
+      throw new Error(errorMessage, { cause: error });
+    }
+
+    return data;
+  } catch (err) {
+    console.error(
+      "Unexpected error in getEscrowTransactionsByCarrierWallet:",
+      err
+    );
     throw err;
   }
 };

@@ -1,8 +1,8 @@
 import StoreClient from "@/components/store-client";
-import { getApiKeys } from "@/data/api-keys";
+import { getFobShipments } from "@/data/fob-shipments";
 
 export default async function StorePage() {
-  const apiKeys = await getApiKeys();
+  const fobShipments = await getFobShipments();
 
-  return <StoreClient apiKeys={apiKeys} />;
+  return <StoreClient shipments={fobShipments} />;
 }
