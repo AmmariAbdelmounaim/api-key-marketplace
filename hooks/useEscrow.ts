@@ -2,7 +2,7 @@
 import { ethers } from 'ethers';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
-import { updateEscrowTransactionStatusAction, createEscrowTransactionAction } from '@/actionts';
+import { updateEscrowTransactionStatusAction, createEscrowTransactionAction, updateEscrowTransactionExportDeclarationHashAction, updateEscrowTransactionBillOfLandingHashAction } from '@/actionts';
 import { fobFactoryAddress, fobFactoryAbi, fobEscrowAbi } from '@/utils/constants';
 import { getFobShipmentById } from '@/data/fob-shipments';
 
@@ -40,13 +40,28 @@ export function useEscrow() {
       });
 
       const receipt = await tx.wait();
+      console.log('Transaction receipt:', receipt);
+      console.log('Receipt logs:', receipt.logs);
+      
+      // More robust event detection
       const event = receipt.logs.find((log: any) => {
         try {
-          return log.eventName === "EscrowCreated";
-        } catch {
+          // Try to decode the log using the factory contract interface
+          const parsedLog = factoryContract.interface.parseLog({
+            topics: log.topics,
+            data: log.data
+          });
+          return parsedLog?.name === "EscrowCreated";
+        } catch (err) {
           return false;
         }
       });
+
+      
+      if (!event) {
+        console.error('EscrowCreated event not found in transaction receipt');
+        throw new Error('EscrowCreated event not found');
+      }
 
       if (event) {
         const escrowAddress = event.args.escrowAddress;
@@ -104,8 +119,8 @@ export function useEscrow() {
       });
 
       await tx.wait();
+      await updateEscrowTransactionExportDeclarationHashAction(transactionId, declarationHash);
       await updateEscrowTransactionStatusAction(transactionId, "ExportCleared");
-      
       toast({
         title: "Export Clearance Confirmed",
         description: "The export clearance has been confirmed on the blockchain",
@@ -144,6 +159,7 @@ export function useEscrow() {
       });
 
       await tx.wait();
+      await updateEscrowTransactionBillOfLandingHashAction(transactionId, billOfLadingHash);
       await updateEscrowTransactionStatusAction(transactionId, "LoadedOnBoard");
       
       toast({
@@ -171,6 +187,10 @@ export function useEscrow() {
         signer
       );
 
+      // Add balance check
+      const contractBalance = await provider.getBalance(escrowAddress);
+      console.log('Contract balance:', ethers.formatEther(contractBalance));
+
       const tx = await escrowContract.releasePayment();
 
       toast({
@@ -178,7 +198,9 @@ export function useEscrow() {
         description: "Please wait for the transaction to be confirmed...",
       });
 
-      await tx.wait();
+      const receipt = await tx.wait();
+      console.log('Transaction receipt:', receipt);  // Add receipt logging
+      
       await updateEscrowTransactionStatusAction(transactionId, "Completed");
       
       toast({
@@ -187,10 +209,10 @@ export function useEscrow() {
       });
 
     } catch (error: any) {
-      console.error(error);
+      console.error('Error details:', error);  // More detailed error logging
       toast({
         title: "Error",
-        description: "Failed to release payment",
+        description: error.message || "Failed to release payment",
         variant: "destructive",
       });
     }

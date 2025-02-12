@@ -6,8 +6,9 @@ export default async function EscrowPage({
 }: {
   params: { id: string };
 }) {
-  const fobShipment = await getFobShipmentById(parseInt(params.id));
-  
+  const { id } = await params;
+  const fobShipment = await getFobShipmentById(parseInt(id));
+
   if (!fobShipment) {
     return <div>Fob Shipment not found</div>;
   }

@@ -143,6 +143,73 @@ export const updateEscrowTransactionStatus = async (
   }
 };
 
+export const updateEscrowTransactionExportDeclarationHash = async (
+  transactionId: number,
+  exportDeclarationHash: string
+) => {
+  try { 
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("escrow_transactions")
+      .update({ export_declaration_hash: exportDeclarationHash })
+      .eq("id", transactionId);
+
+    if (error) {
+      const errorMessage = `Failed to update escrow transaction export declaration hash: ${
+        error?.message || "Unknown error"
+      }`;
+      console.error(
+        "Supabase error in updateEscrowTransactionExportDeclarationHash:",
+        errorMessage,
+        error
+      );
+      throw new Error(errorMessage, { cause: error });
+    }
+
+    return data;
+  } catch (err) {
+    console.error(
+      "Unexpected error in updateEscrowTransactionExportDeclarationHash:",
+      err
+    );
+    throw err;
+  }
+};
+
+export const updateEscrowTransactionBillOfLandingHash = async (
+  transactionId: number,
+  billOfLandingHash: string
+) => {
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("escrow_transactions")
+      .update({ bill_of_landing_hash: billOfLandingHash })
+      .eq("id", transactionId);
+      
+    if (error) {
+      const errorMessage = `Failed to update escrow transaction bill of landing hash: ${
+        error?.message || "Unknown error"
+      }`;
+      console.error(
+        "Supabase error in updateEscrowTransactionBillOfLandingHash:",
+        errorMessage,
+        error
+      );
+      throw new Error(errorMessage, { cause: error });
+    }
+
+    return data;
+  } catch (err) {
+    console.error(
+      "Unexpected error in updateEscrowTransactionBillOfLandingHash:",
+      err
+    );
+    throw err;
+  }
+};
+
+
 export const getEscrowTransactionsByCarrierWallet = async (
   carrierWallet: string
 ) => {

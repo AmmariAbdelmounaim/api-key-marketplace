@@ -13,7 +13,6 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Anchor, Ship, Package, Building2 } from "lucide-react";
 import { useEscrow } from "@/hooks/useEscrow";
-import { Tables } from "@/database.types";
 import { getFobShipmentById } from "@/data/fob-shipments";
 
 export default function EscrowDeposit({
@@ -61,26 +60,30 @@ export default function EscrowDeposit({
               <div className="flex items-center justify-between border-b pb-2">
                 <span className="flex items-center">
                   <Building2 className="mr-2 h-4 w-4" />
-                  Seller ID:
+                  Seller Address:
                 </span>
                 <span
                   className="font-medium truncate max-w-[200px]"
-                  title={shipment.seller_id}
+                  // @ts-ignore
+                  title={shipment.seller?.wallet_address!}
                 >
-                  {shipment.seller_id}
+                  {/* @ts-ignore */}
+                  {shipment.seller?.wallet_address!}
                 </span>
               </div>
 
               <div className="flex items-center justify-between border-b pb-2">
                 <span className="flex items-center">
                   <Ship className="mr-2 h-4 w-4" />
-                  Carrier ID:
+                  Carrier Address:
                 </span>
                 <span
                   className="font-medium truncate max-w-[200px]"
-                  title={shipment.carrier_id}
+                  // @ts-ignore
+                  title={shipment.carrier?.wallet_address!}
                 >
-                  {shipment.carrier_id}
+                  {/* @ts-ignore */}
+                  {shipment.carrier?.wallet_address!}
                 </span>
               </div>
 
