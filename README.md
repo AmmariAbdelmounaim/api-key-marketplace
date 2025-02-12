@@ -102,6 +102,7 @@ A full-stack application that combines modern web development with blockchain sm
      ```
      NEXT_PUBLIC_SUPABASE_URL=<YOUR_SUPABASE_URL>
      NEXT_PUBLIC_SUPABASE_ANON_KEY=<YOUR_SUPABASE_ANON_KEY>
+     JWT_SECRET=<YOUR_JWT_SECRET>
      ```
    
 2. **Blockchain Environment (Hardhat):**
