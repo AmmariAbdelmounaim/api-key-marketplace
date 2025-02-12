@@ -1,4 +1,3 @@
-```markdown
 # Next.js and Supabase Starter Kit with FOB Escrow Integration
 
 A full-stack application that combines modern web development with blockchain smart contracts. This starter kit uses Next.js with Supabase for authentication and backend functionality, while integrating Hardhat-based smart contracts to manage an escrow service (FOBEscrow). The project also includes a fully responsive UI built with Tailwind CSS and shadcn/ui components, and supports deployment on Vercel.
