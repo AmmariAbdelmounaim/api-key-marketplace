@@ -9,44 +9,6 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      api_keys: {
-        Row: {
-          created_at: string
-          description: string | null
-          id: number
-          key: string | null
-          price: number | null
-          seller_id: string | null
-          title: string | null
-        }
-        Insert: {
-          created_at?: string
-          description?: string | null
-          id?: number
-          key?: string | null
-          price?: number | null
-          seller_id?: string | null
-          title?: string | null
-        }
-        Update: {
-          created_at?: string
-          description?: string | null
-          id?: number
-          key?: string | null
-          price?: number | null
-          seller_id?: string | null
-          title?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "api-keys_seller_id_fkey"
-            columns: ["seller_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       escrow_transactions: {
         Row: {
           amount: number | null
@@ -88,13 +50,6 @@ export type Database = {
           status?: Database["public"]["Enums"]["escrow_status"] | null
         }
         Relationships: [
-          {
-            foreignKeyName: "escrew_transactions_api_key_id_fkey"
-            columns: ["fob_shipment_id"]
-            isOneToOne: false
-            referencedRelation: "api_keys"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "escrew_transactions_buyer_wallet_fkey"
             columns: ["buyer_wallet"]
@@ -175,61 +130,6 @@ export type Database = {
             columns: ["seller_id"]
             isOneToOne: false
             referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      payments: {
-        Row: {
-          amount: number
-          created_at: string | null
-          from_wallet: string
-          id: number
-          payment_status: string | null
-          to_wallet: string
-          transaction_id: number
-          tx_hash: string | null
-        }
-        Insert: {
-          amount: number
-          created_at?: string | null
-          from_wallet: string
-          id?: number
-          payment_status?: string | null
-          to_wallet: string
-          transaction_id: number
-          tx_hash?: string | null
-        }
-        Update: {
-          amount?: number
-          created_at?: string | null
-          from_wallet?: string
-          id?: number
-          payment_status?: string | null
-          to_wallet?: string
-          transaction_id?: number
-          tx_hash?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "payments_from_wallet_fkey"
-            columns: ["from_wallet"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["wallet_address"]
-          },
-          {
-            foreignKeyName: "payments_to_wallet_fkey"
-            columns: ["to_wallet"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["wallet_address"]
-          },
-          {
-            foreignKeyName: "payments_transaction_id_fkey"
-            columns: ["transaction_id"]
-            isOneToOne: false
-            referencedRelation: "escrow_transactions"
             referencedColumns: ["id"]
           },
         ]
