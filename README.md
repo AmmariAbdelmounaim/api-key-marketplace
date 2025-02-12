@@ -1,104 +1,245 @@
-<a href="https://demo-nextjs-with-supabase.vercel.app/">
-  <img alt="Next.js and Supabase Starter Kit - the fastest way to build apps with Next.js and Supabase" src="https://demo-nextjs-with-supabase.vercel.app/opengraph-image.png">
-  <h1 align="center">Next.js and Supabase Starter Kit</h1>
-</a>
+```markdown
+# Next.js and Supabase Starter Kit with FOB Escrow Integration
 
-<p align="center">
- The fastest way to build apps with Next.js and Supabase
-</p>
+A full-stack application that combines modern web development with blockchain smart contracts. This starter kit uses Next.js with Supabase for authentication and backend functionality, while integrating Hardhat-based smart contracts to manage an escrow service (FOBEscrow). The project also includes a fully responsive UI built with Tailwind CSS and shadcn/ui components, and supports deployment on Vercel.
 
-<p align="center">
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#demo"><strong>Demo</strong></a> ·
-  <a href="#deploy-to-vercel"><strong>Deploy to Vercel</strong></a> ·
-  <a href="#clone-and-run-locally"><strong>Clone and run locally</strong></a> ·
-  <a href="#feedback-and-issues"><strong>Feedback and issues</strong></a>
-  <a href="#more-supabase-examples"><strong>More Examples</strong></a>
-</p>
-<br/>
+---
+
+## Table of Contents
+
+- [Features](#features)
+- [Architecture & Structure](#architecture--structure)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Configuration](#configuration)
+- [Running the Application](#running-the-application)
+  - [Development Server](#development-server)
+  - [Testing](#testing)
+  - [Smart Contract Compilation & Deployment](#smart-contract-compilation--deployment)
+- [Deployment](#deployment)
+- [Project Structure](#project-structure)
+- [Usage](#usage)
+- [Additional Scripts & Tools](#additional-scripts--tools)
+- [Contributing](#contributing)
+- [License](#license)
+
+---
 
 ## Features
 
-- Works across the entire [Next.js](https://nextjs.org) stack
-  - App Router
-  - Pages Router
-  - Middleware
-  - Client
-  - Server
-  - It just works!
-- supabase-ssr. A package to configure Supabase Auth to use cookies
-- Styling with [Tailwind CSS](https://tailwindcss.com)
-- Components with [shadcn/ui](https://ui.shadcn.com/)
-- Optional deployment with [Supabase Vercel Integration and Vercel deploy](#deploy-your-own)
-  - Environment variables automatically assigned to Vercel project
+- **Full-Stack Integration:** Seamlessly combines Next.js (both App and Pages Router) with Supabase for SSR and authentication.
+- **Blockchain Escrow:** Smart contracts implemented in Solidity (FOBEscrow and FOBEscrowFactory) for managing escrow transactions.
+- **Secure Authentication:** Wallet-based authentication using MetaMask and JWT tokens.
+- **UI Components:** Styled with Tailwind CSS and shadcn/ui for a modern, responsive design.
+- **Testing:** Comprehensive tests using Jest, Chai, and Hardhat for both API endpoints and smart contract functionality.
+- **Deployment Ready:** Supports deployment to Vercel with environment variable management.
+- **Local Development:** Easy-to-follow instructions to set up both the frontend/backend and the blockchain development environment.
 
-## Demo
+---
 
-You can view a fully working demo at [demo-nextjs-with-supabase.vercel.app](https://demo-nextjs-with-supabase.vercel.app/).
+## Architecture & Structure
 
-## Deploy to Vercel
+- **Frontend:**  
+  - Built with Next.js using both Server and Client Components.
+  - Uses Supabase for backend services and authentication.
+  - UI components styled with Tailwind CSS and shadcn/ui.
+  - Wallet integration via ethers.js for blockchain interactions.
 
-Vercel deployment will guide you through creating a Supabase account and project.
+- **Smart Contracts:**  
+  - **FOBEscrow.sol:** Manages escrow transactions through state transitions (Created, ExportCleared, LoadedOnBoard, Completed, Refunded).
+  - **FOBEscrowFactory.sol:** Factory contract to dynamically deploy new escrow instances.
+  - Tested using Hardhat along with integration/unit tests.
 
-After installation of the Supabase integration, all relevant environment variables will be assigned to the project so the deployment is fully functioning.
+- **Backend & API:**  
+  - API routes for authentication and user session management.
+  - Uses JWT for securing routes and managing sessions.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&project-name=nextjs-with-supabase&repository-name=nextjs-with-supabase&demo-title=nextjs-with-supabase&demo-description=This+starter+configures+Supabase+Auth+to+use+cookies%2C+making+the+user%27s+session+available+throughout+the+entire+Next.js+app+-+Client+Components%2C+Server+Components%2C+Route+Handlers%2C+Server+Actions+and+Middleware.&demo-url=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2F&external-id=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&demo-image=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2Fopengraph-image.png)
+---
 
-The above will also clone the Starter kit to your GitHub, you can clone that locally and develop locally.
+## Getting Started
 
-If you wish to just develop locally and not deploy to Vercel, [follow the steps below](#clone-and-run-locally).
+### Prerequisites
 
-## Clone and run locally
+- [Node.js](https://nodejs.org/) (v16+)
+- [npm](https://www.npmjs.com/) or [Yarn](https://yarnpkg.com/) / [pnpm](https://pnpm.io/)
+- [MetaMask](https://metamask.io/) browser extension for wallet connectivity
+- [Supabase](https://supabase.com/) account and project for backend services
+- (Optional) [Hardhat](https://hardhat.org/) CLI for smart contract development
 
-1. You'll first need a Supabase project which can be made [via the Supabase dashboard](https://database.new)
+### Installation
 
-2. Create a Next.js app using the Supabase Starter template npx command
-
-   ```bash
-   npx create-next-app --example with-supabase with-supabase-app
-   ```
-
-   ```bash
-   yarn create next-app --example with-supabase with-supabase-app
-   ```
-
-   ```bash
-   pnpm create next-app --example with-supabase with-supabase-app
-   ```
-
-3. Use `cd` to change into the app's directory
+1. **Clone the repository:**
 
    ```bash
-   cd with-supabase-app
+   git clone https://github.com/your-username/your-repo.git
+   cd your-repo
    ```
 
-4. Rename `.env.example` to `.env.local` and update the following:
+2. **Install dependencies:**
 
+   Using npm:
+   ```bash
+   npm install
    ```
-   NEXT_PUBLIC_SUPABASE_URL=[INSERT SUPABASE PROJECT URL]
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=[INSERT SUPABASE PROJECT API ANON KEY]
+   Or using yarn:
+   ```bash
+   yarn install
+   ```
+   Or using pnpm:
+   ```bash
+   pnpm install
    ```
 
-   Both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` can be found in [your Supabase project's API settings](https://app.supabase.com/project/_/settings/api)
+### Configuration
 
-5. You can now run the Next.js local development server:
+1. **Supabase Setup:**
+
+   - Rename the environment example file:
+     ```bash
+     cp .env.example .env.local
+     ```
+   - Update `.env.local` with your Supabase project URL and API key:
+     ```
+     NEXT_PUBLIC_SUPABASE_URL=<YOUR_SUPABASE_URL>
+     NEXT_PUBLIC_SUPABASE_ANON_KEY=<YOUR_SUPABASE_ANON_KEY>
+     ```
+   
+2. **Blockchain Environment (Hardhat):**
+
+   - Ensure that Hardhat is installed as a dev dependency.
+   - Review the `hardhat.config.ts` file to configure networks and solidity version.
+   - (Optional) Set up additional environment variables if needed for deployments.
+
+---
+
+## Running the Application
+
+### Development Server
+
+Start the Next.js development server:
+
+```bash
+npm run dev
+```
+
+Visit [http://localhost:3000](http://localhost:3000) to view the application.
+
+### Testing
+
+- **API Tests:** Run Next.js API route tests using:
+  ```bash
+  npm run test:api
+  ```
+- **Smart Contract Tests:** Run Hardhat tests for your Solidity contracts:
+  ```bash
+  npm run test:contracts
+  ```
+
+### Smart Contract Compilation & Deployment
+
+1. **Compile Contracts:**
 
    ```bash
-   npm run dev
+   npx hardhat compile
    ```
 
-   The starter kit should now be running on [localhost:3000](http://localhost:3000/).
+2. **Run Contract Tests:**
 
-6. This template comes with the default shadcn/ui style initialized. If you instead want other ui.shadcn styles, delete `components.json` and [re-install shadcn/ui](https://ui.shadcn.com/docs/installation/next)
+   ```bash
+   npx hardhat test
+   ```
 
-> Check out [the docs for Local Development](https://supabase.com/docs/guides/getting-started/local-development) to also run Supabase locally.
+3. **Deploy Contracts:**
 
-## Feedback and issues
+   Use the provided deployment script:
+   ```bash
+   npx hardhat run scripts/deploy.ts --network <your-network>
+   ```
 
-Please file feedback and issues over on the [Supabase GitHub org](https://github.com/supabase/supabase/issues/new/choose).
+   You can also use Hardhat Ignition modules if needed for advanced deployment strategies.
 
-## More Supabase examples
+---
 
-- [Next.js Subscription Payments Starter](https://github.com/vercel/nextjs-subscription-payments)
-- [Cookie-based Auth and the Next.js 13 App Router (free course)](https://youtube.com/playlist?list=PL5S4mPUpp4OtMhpnp93EFSo42iQ40XjbF)
-- [Supabase Auth and the Next.js App Router](https://github.com/supabase/supabase/tree/master/examples/auth/nextjs)
+## Deployment
+
+- **Vercel Deployment:**  
+  The project is set up for easy deployment on Vercel. Upon connecting your GitHub repository, Vercel will automatically detect and set required environment variables if configured properly (refer to the Vercel docs).
+
+- **Production Setup:**  
+  For a production-ready deployment, ensure all environment variables (including Supabase credentials and any blockchain network details) are securely set.
+
+---
+
+## Project Structure
+
+```
+.
+├── app/                    # Next.js app directory (pages, components, API routes)
+│   ├── globals.css         # Global styles & Tailwind CSS configuration
+│   ├── layout.tsx          # App layout and metadata
+│   └── (protected)/        # Protected routes and dashboard pages
+├── components/             # Reusable UI components (e.g., Card, Button)
+├── contracts/              # Solidity smart contracts (FOBEscrow, FOBEscrowFactory)
+├── scripts/                # Deployment and utility scripts (e.g., deploy.ts, trackBalances.ts)
+├── tests/                  # Testing suites for API routes and smart contracts
+│   ├── api/                # API tests using Jest and Testing Library
+│   └── contracts/          # Hardhat tests for smart contracts
+├── hardhat.config.ts       # Hardhat configuration file
+├── package.json            # Project scripts and dependencies
+├── postcss.config.js       # PostCSS configuration for Tailwind CSS
+├── tailwind.config.ts      # Tailwind CSS configuration
+└── tsconfig.json           # TypeScript configuration
+```
+
+---
+
+## Usage
+
+- **Authentication & Wallet Connection:**  
+  Users can connect their MetaMask wallet and sign messages to authenticate. The authentication flow leverages Supabase and JWT for secure session management.
+
+- **Smart Contract Interactions:**  
+  The frontend (via hooks in `hooks/useEscrow.ts`) allows users to interact with the smart contracts:
+  - **Confirm Export Clearance:** Seller confirmation with a unique export declaration hash.
+  - **Confirm Loaded On Board:** Carrier confirmation indicating cargo is loaded.
+  - **Release Payment / Refund Buyer:** Buyer or seller can trigger payment release upon transaction completion or refund if necessary.
+  
+- **Tracking Balances:**  
+  A utility script (`scripts/trackBalances.ts`) is provided to display live balances of the buyer, seller, and escrow contract on-chain.
+
+---
+
+## Additional Scripts & Tools
+
+- **Deployment Scripts:**  
+  - `scripts/deploy.ts`: Deploys the FOBEscrowFactory contract.
+  - `scripts/trackBalances.ts`: Monitors and logs live Ethereum balances.
+
+- **Testing Frameworks:**  
+  - Hardhat for smart contract compilation and testing.
+  - Jest and Testing Library for API route tests.
+  - Chai for assertions in smart contract tests.
+
+- **UI & Styling:**  
+  - Tailwind CSS for utility-first styling.
+  - shadcn/ui components for modern, responsive interface elements.
+
+---
+
+## Contributing
+
+Contributions are welcome! Please follow these steps:
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Commit your changes with clear messages.
+4. Submit a pull request for review.
+
+For major changes, please open an issue first to discuss what you would like to change.
+
+---
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+```
