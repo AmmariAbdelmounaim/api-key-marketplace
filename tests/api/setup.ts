@@ -69,3 +69,8 @@ jest.mock("ethers", () => ({
     throw new Error("Invalid signature");
   }
 }));
+
+// Mock environment variables
+process.env.JWT_SECRET = 'test_secret';
+
+// Add any other global test setup here

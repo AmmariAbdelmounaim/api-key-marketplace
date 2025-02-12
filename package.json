@@ -4,7 +4,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "jest"
+    "test": "npm run test:api && npm run test:contracts",
+    "test:api": "jest tests/api --config jest.config.js",
+    "test:contracts": "npx hardhat test",
+    "test:api:watch": "jest tests/api --watch --config jest.config.js",
+    "test:contracts:watch": "npx hardhat test --watch"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.1.1",
