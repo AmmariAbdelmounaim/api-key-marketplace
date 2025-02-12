@@ -71,8 +71,8 @@ A full-stack application that combines modern web development with blockchain sm
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/your-username/your-repo.git
-   cd your-repo
+   git clone https://github.com/AmmariAbdelmounaim/fob-escrow
+   cd fob-escrow
    ```
 
 2. **Install dependencies:**
@@ -237,9 +237,3 @@ Contributions are welcome! Please follow these steps:
 
 For major changes, please open an issue first to discuss what you would like to change.
 
----
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
-```
