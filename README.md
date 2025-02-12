@@ -7,6 +7,7 @@ A full-stack application that combines modern web development with blockchain sm
 ## Table of Contents
 
 - [Features](#features)
+- [Demo](#demo)
 - [Architecture & Structure](#architecture--structure)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
@@ -34,6 +35,14 @@ A full-stack application that combines modern web development with blockchain sm
 - **Testing:** Comprehensive tests using Jest, Chai, and Hardhat for both API endpoints and smart contract functionality.
 - **Deployment Ready:** Supports deployment to Vercel with environment variable management.
 - **Local Development:** Easy-to-follow instructions to set up both the frontend/backend and the blockchain development environment.
+
+## Demo
+
+Watch the demo video below for a quick walk-through of the application:
+
+[![Demo Video](https://img.youtube.com/vi/YOUR_VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=YOUR_VIDEO_ID)
+
+Replace `YOUR_VIDEO_ID` with the actual video ID of your demo video.
 
 ---
 
